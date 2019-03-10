@@ -1,5 +1,6 @@
 package ch.heigvd.res.labio.impl.filters;
 
+import ch.heigvd.res.labio.impl.Utils;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
+  static int nbLigne = 1;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
@@ -25,17 +27,38 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String line[];
+    do {
+      line = Utils.getNextLine(str);
+      super.write(nbLigne + " " + line[0], off, len);
+    }
+    while(line[1] != null);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    String line[];
+    do {
+      line = Utils.getNextLine(new String(cbuf));
+      super.write(nbLigne + " " + line[0], off, len);
+    }
+    while(line[1] != null);
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    switch (c) {
+      case '\n':
+      case '\r':
+        super.write(c + nbLigne + " ");
+        break;
+      default:
+        super.write(c);
+        break;
+
+    }
+}
+
+
 
 }
