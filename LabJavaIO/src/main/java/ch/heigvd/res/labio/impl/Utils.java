@@ -20,12 +20,17 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    int indexR = lines.indexOf('\r');
-    int indexN = lines.indexOf('\n');
-    int index = indexN <= indexR + 1 ? indexN : indexR;
-
-    String[] str = {lines.substring(0,index),lines.substring(index+1)};
-    return str;
+    int index;
+    if(lines.contains("\r\n")) {
+      index = lines.indexOf("\r\n") + 2;
+    }
+    else {
+      if ( (index = lines.indexOf('\r') + 1) == 0)
+       /* if( (index = lines.indexOf('\n') + 1) == 0)
+          return new String[]{lines,null};*/
+        index = lines.indexOf('\n') + 1;
+    }
+    return new String[]{lines.substring(0,index),lines.substring(index)};
   }
 
 }
