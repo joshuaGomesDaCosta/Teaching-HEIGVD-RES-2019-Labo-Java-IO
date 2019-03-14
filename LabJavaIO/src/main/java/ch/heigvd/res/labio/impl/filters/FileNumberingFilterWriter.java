@@ -21,10 +21,11 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
   static int nbLigne;
   static boolean newLine;
+
   public FileNumberingFilterWriter(Writer out) {
     super(out);
     nbLigne = 1;
-    newLine = true;
+    newLine = false;
   }
 
   @Override
@@ -34,28 +35,37 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    /*
-    String line[] = { new String(cbuf),null};
-    do {
-      super.write(nbLigne + "\t" + line[0], off, len);
-      line = Utils.getNextLine(line[0]);
+    String str = "";
+    if(nbLigne == 1) {
+      str += nbLigne + "\t";
       nbLigne++;
     }
-    while(line[1] != null);
-    */
-    String str = "";
-    for( int i = off; i < len; i++) {
-      if (cbuf[i] == '\r' || cbuf[i] == '\n') {
+
+    for( int i = off; i < off + len; i++) {
+      if( cbuf[i] == '\r') {
         newLine = true;
-      }else if (newLine) {
+        str += cbuf[i];
+      }
+      else if( cbuf[i] == '\n') {
+        str += cbuf[i];
         str += nbLigne + "\t";
         nbLigne++;
         newLine = false;
       }
+      else{
+        if(newLine){
+          newLine = false;
+          str += nbLigne + "\t" + cbuf[i];
+          nbLigne++;
+        }
+        else{
+          str += cbuf[i];
+        }
+      }
 
-      str += cbuf[i];
     }
-      super.write(str, 0, str.length());
+
+    super.write(str, 0, str.length());
   }
 
   @Override
