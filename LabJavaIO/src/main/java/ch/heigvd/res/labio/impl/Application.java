@@ -152,7 +152,7 @@ public class Application implements IApplication {
           try{
             writer.write(file.getPath() + '\n', 0, file.getPath().length() + 1);
           } catch (IOException e){
-            LOG.log(Level.SEVERE, "Error can't print filename", e.getMessage());
+            LOG.log(Level.SEVERE, "Error can not print filename", e.getMessage());
           }
         }
       });
