@@ -139,11 +139,11 @@ public class Application implements IApplication {
    * This method uses a IFileExplorer to explore the file system and prints the name of each
    * encountered file and directory.
    */
-  void printFileNames(final Writer writer) {
+  void printFileNames(final Writer writer){
     IFileExplorer explorer = new DFSFileExplorer();
       explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
         @Override
-        public void visit(File file) {
+        public void visit(File file){
           /*
            * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
            * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
@@ -151,7 +151,9 @@ public class Application implements IApplication {
            */
           try{
             writer.write(file.getPath() + '\n', 0, file.getPath().length() + 1);
-          }catch(Exception e){}
+          } catch (IOException e){
+            LOG.log(Level.SEVERE, "Error can't print filename", e.getMessage());
+          }
         }
       });
   }
