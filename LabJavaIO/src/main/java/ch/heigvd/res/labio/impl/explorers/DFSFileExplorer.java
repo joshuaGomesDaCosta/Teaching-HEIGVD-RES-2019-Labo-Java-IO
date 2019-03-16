@@ -20,10 +20,10 @@ public class DFSFileExplorer implements IFileExplorer {
   public void explore(File rootDirectory, IFileVisitor vistor){
 
     File[] dirFiles = rootDirectory.listFiles();
-    Arrays.sort(dirFiles);
     vistor.visit(rootDirectory);
 
     if (dirFiles != null) {
+      Arrays.sort(dirFiles);
       for (File file : dirFiles) {
           //évite un appel supplémentaire
           if (file.isDirectory()) {
